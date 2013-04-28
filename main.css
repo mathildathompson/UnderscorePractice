@@ -1,0 +1,18 @@
+.booklink{
+	color:red;
+	margin-right: 185px;
+	display: inline-block;
+
+	
+}
+
+#bookshelf{
+    background-image: url("http://fc02.deviantart.net/fs71/f/2010/163/e/8/Ipad_Bookshelf_Background_by_daftfunk84.png");
+    margin-top: 100px;
+}
+
+.shelf{
+	text-align: center;
+	color: purple;
+	margin-top: 30px;
+}

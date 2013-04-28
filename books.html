@@ -1,24 +1,98 @@
 <html>
   <head>
     <title>Books Underscore Practice</title>
+    <link href = "main.css" type = "text/css" rel = "stylesheet"/>
     <script src="underscore-min.js"></script>
   </head>
   <body>
+    <div class = "shelf">
+         <h1> My Amazing Bookshelf </h1>
+    </div>
+
     <div id="bookshelf"></div>
 
-    <div id="todo">
+   <!--  <div id="todo">
       <ol>
         <li>Use _.each to iterate over each book and display it in the bookshelf</li>
         <li>Use _.map to pull out the web reader URL and create a link around the book image, so that when I click it I can see inside the book.</li>
         <li>Use _.find to find all the books with a rating of 4 or 5, and add a CSS class to them called hot. Add CSS so that the hot class is a snazzy star shape or something.</li>
 
       </ol>
-    </div>
+    </div> -->
 
     <script>
       function handleResponse(response) {
-        console.log(response.items)
-      }
+        console.log(response.items);
+        books = response.items;
+        //that puts it into a global varibale so you can access from console
+
+
+        _.each(response.items, function(book) {
+        
+         // var URL = books[0].volumeInfo.imageLinks.smallThumbnail;
+        try {
+          var bookshelf = document.getElementById('bookshelf');
+          var image = document.createElement('img');
+          var pTag = document.createElement('p');
+
+          var categories = book.volumeInfo.categories
+          var author = book.volumeInfo.authors;
+          pTag = document.createTextNode(author);
+
+          // pTag = document.createTextNode(categories);
+          image.setAttribute('src', book.volumeInfo.imageLinks.thumbnail);
+          image.setAttribute('class', 'thumbnail');
+
+          bookshelf.appendChild(image);
+          bookshelf.appendChild(pTag);
+        } 
+        catch(e){
+          console.log("Opps there is a problem");
+        }
+
+       });
+
+
+        var rating = _.map(response.items, function(rating){
+          return rating.volumeInfo.averageRating;
+        });
+
+          _.each(rating, function (eachrating){
+            if (eachrating >= 4){
+              var bookshelf = document.getElementById('bookshelf');
+              var h5Tag = document.createElement('h5');
+              h5Tag.className = "rating";
+
+              var bookrating = document.createTextNode(eachrating);
+            
+
+              h5Tag.appendChild(bookrating);
+              bookshelf.appendChild(h5Tag);
+              // console.log(eachrating);
+            };
+          });
+
+
+      var links = _.map(response.items, function(book){
+        
+      return book.accessInfo.pdf.downloadLink;
+      //returns an array with the 6 links
+      });
+
+      _.each(links, function(link_info){
+
+      
+         var bookshelf = document.getElementById('bookshelf');
+         var link = document.createElement('a');
+         link.setAttribute('href', link_info);
+         link.setAttribute("class", "booklink");
+         link.appendChild(document.createTextNode('click Here'));
+         bookshelf.appendChild(link);
+       });
+
+
+
+     } 
     </script>
 
     <script src="https://www.googleapis.com/books/v1/volumes?q=harry+potter&callback=handleResponse"></script>
